@@ -384,6 +384,111 @@
       font-size: 1rem;
     }
 
+    /* ===== PAGO POR QR ===== */
+    .qr-pay {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .qr-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: #6b7280;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .qr-badge {
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      background: #fff7ed;
+      color: #9a3412;
+      border: 1px solid #fed7aa;
+      font-weight: 700;
+    }
+
+    .qr-grid {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    @media (max-width: 520px) {
+      .qr-grid { grid-template-columns: 1fr; }
+    }
+
+    .qr-img {
+      width: 220px;
+      max-width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.12);
+    }
+
+    .qr-note {
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    .qr-bankbox {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.85rem;
+      color: var(--color-text-main);
+    }
+
+    .qr-form {
+      display: grid;
+      gap: 10px;
+      max-width: 520px;
+      margin-top: 10px;
+    }
+
+    .qr-form input, .qr-form select {
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .qr-form input:focus, .qr-form select:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 1px var(--color-primary-soft);
+    }
+
+    .qr-form button {
+      border-radius: 999px;
+      border: none;
+      padding: 11px 14px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      background: #16a34a;
+      color: #f9fafb;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(22, 163, 74, 0.25);
+      transition: transform 0.08s, box-shadow 0.08s, background 0.12s;
+    }
+
+    .qr-form button:hover {
+      background: #15803d;
+      box-shadow: 0 10px 26px rgba(22, 163, 74, 0.32);
+    }
+
+    .qr-form button:active {
+      transform: translateY(1px);
+      box-shadow: 0 6px 16px rgba(22, 163, 74, 0.2);
+    }
+
     /* FLUJO DE USO + BOTÓN DESCARGA */
     .usage-flow {
       margin-top: 18px;
@@ -577,6 +682,53 @@
           </div>
         </div>
 
+        <!-- ===== PAGO POR QR (SE ADAPTA AL PLAN SELECCIONADO) ===== -->
+        <div class="qr-pay">
+          <div class="qr-label">
+            Pago alternativo por QR
+            <span class="qr-badge">ACTIVACIÓN MANUAL</span>
+          </div>
+
+          <div class="qr-grid">
+            <div>
+              <img src="/qr.png" alt="QR de pago Banco Pichincha" class="qr-img" />
+              <div class="qr-note">
+                Escanea el QR desde tu app bancaria y realiza el pago.<br/>
+                Luego envía el comprobante por WhatsApp para activar tu usuario.
+              </div>
+            </div>
+
+            <div>
+              <div class="qr-bankbox">
+                <div><strong>Banco:</strong> Pichincha</div>
+                <div><strong>Titular:</strong> Darlyn Alexis Peña Melendres</div>
+                <div style="margin-top:6px;">
+                  <strong>Monto según plan:</strong>
+                  <span id="qrAmountText">—</span>
+                </div>
+                <div style="margin-top:6px;">
+                  <strong>Referencia sugerida:</strong>
+                  <span id="qrRefHint">VACECPRO-XXXX-PLAN</span>
+                </div>
+              </div>
+
+              <div class="qr-form">
+                <input id="qr_name" type="text" placeholder="Nombre y apellido" />
+                <input id="qr_phone" type="tel" placeholder="Teléfono (ej: 09xxxxxxxx)" />
+                <input id="qr_ref" type="text" placeholder="Referencia (opcional, ej: VACECPRO-1234-ANUAL)" />
+
+                <button type="button" onclick="sendQrReceiptWhatsapp()">
+                  Enviar comprobante por WhatsApp
+                </button>
+
+                <div style="font-size:12px; color:#6b7280; line-height:1.4;">
+                  Tras verificar el pago, el administrador te asignará <strong>usuario y contraseña</strong> para acceder a la app.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Feedback -->
         <div id="feedback" aria-live="polite"></div>
 
@@ -610,10 +762,10 @@
         <div class="usage-flow">
           <div class="usage-title">¿Cómo funciona el flujo de uso?</div>
           <ol class="usage-list">
-            <li>Elige el plan mensual o anual y realiza el pago de la suscripción con tu cuenta de PayPal.</li>
-            <li>Una vez confirmada la suscripción, descarga la aplicación VacEcPro en tu dispositivo.</li>
-            <li>Instala la app e inicia sesión utilizando el correo electrónico con el que realizaste la compra o el método de acceso que tu institución defina.</li>
-            <li>El sistema validará tu suscripción activa y se habilitarán automáticamente las funciones Pro dentro de la aplicación.</li>
+            <li>Elige el plan mensual o anual y realiza el pago con PayPal o mediante transferencia usando el QR.</li>
+            <li>Si pagas con PayPal, la suscripción se valida automáticamente. Si pagas por QR, envía el comprobante por WhatsApp para activación manual.</li>
+            <li>Una vez confirmada tu suscripción/activación, descarga e instala la aplicación VacEcPro.</li>
+            <li>Inicia sesión utilizando el correo electrónico ingresado como usuario y las credenciales asignadas.</li>
           </ol>
 
           <!-- Botón de descarga de APK -->
@@ -630,7 +782,7 @@
   </main>
 
   <footer>
-    VacEcPro · Integración PayPal Subscriptions (LIVE).  
+    VacEcPro · Integración PayPal Subscriptions (LIVE).
     Para soporte técnico, contacta al administrador de la aplicación o revisa la
     documentación de <a href="https://developer.paypal.com/docs/subscriptions/" target="_blank" rel="noreferrer">PayPal Subscriptions</a>.
   </footer>
@@ -792,6 +944,7 @@
       panelMonthly.style.display = '';
       panelYearly.style.display = 'none';
       showFeedback(null, '');
+      refreshQrPlanUI();
     });
 
     btnYearly.addEventListener('click', function () {
@@ -802,6 +955,7 @@
       panelMonthly.style.display = 'none';
       panelYearly.style.display = '';
       showFeedback(null, '');
+      refreshQrPlanUI();
     });
   })();
 
@@ -819,6 +973,76 @@
     );
   } else {
     console.error('PayPal SDK no se ha cargado correctamente.');
+  }
+
+  // ===== QR: datos y envío por WhatsApp =====
+  const QR_WHATSAPP_NUMBER = "5930991497007";
+
+  function getSelectedPlanForQr() {
+    var yearlyPanel = document.getElementById('price-yearly');
+    var isYearly = yearlyPanel && yearlyPanel.style.display !== 'none';
+
+    if (isYearly) {
+      return { key: 'ANUAL', label: 'Anual', amount: '$29.99 USD' };
+    }
+    return { key: 'MENSUAL', label: 'Mensual', amount: '$3.99 USD' };
+  }
+
+  function refreshQrPlanUI() {
+    var plan = getSelectedPlanForQr();
+
+    var amountText = document.getElementById('qrAmountText');
+    if (amountText) amountText.textContent = plan.amount + " (" + plan.label + ")";
+
+    var refHint = document.getElementById('qrRefHint');
+    if (refHint) refHint.textContent = "VACECPRO-XXXX-" + plan.key;
+  }
+
+  // Inicializa UI del QR al cargar
+  refreshQrPlanUI();
+
+  function sendQrReceiptWhatsapp() {
+    var emailInput = document.getElementById('emailInput');
+    var email = emailInput ? emailInput.value.trim() : '';
+
+    if (!email) {
+      alert("Por favor ingresa tu correo electrónico (se usará como usuario en la app).");
+      return;
+    }
+
+    var plan = getSelectedPlanForQr();
+
+    var name = (document.getElementById('qr_name')?.value || '').trim();
+    var phone = (document.getElementById('qr_phone')?.value || '').trim();
+    var ref = (document.getElementById('qr_ref')?.value || '').trim();
+
+    if (!ref) {
+      var digits = (phone.match(/\d+/g) || []).join('');
+      var last4 = digits.length >= 4 ? digits.slice(-4) : "XXXX";
+      ref = "VACECPRO-" + last4 + "-" + plan.key;
+    }
+
+    var lines = [
+      "Hola, realicé un pago por QR para VACECPRO.",
+      "",
+      "BANCO: Pichincha",
+      "Titular: Darlyn Alexis Peña Melendres",
+      "Plan: " + plan.label,
+      "Monto: " + plan.amount,
+      "",
+      "Datos del usuario:",
+      "Correo (usuario app): " + email,
+      "Nombre: " + (name || "—"),
+      "Teléfono: " + (phone || "—"),
+      "Referencia: " + ref,
+      "",
+      "Adjunto el comprobante para activación. Gracias."
+    ];
+
+    var text = encodeURIComponent(lines.join("\n"));
+    var url = "https://wa.me/" + QR_WHATSAPP_NUMBER + "?text=" + text;
+
+    window.open(url, "_blank", "noopener,noreferrer");
   }
 </script>
 </body>
