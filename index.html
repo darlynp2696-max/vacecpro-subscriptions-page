@@ -96,15 +96,9 @@
     }
 
     @media (max-width: 900px) {
-      .container {
-        grid-template-columns: minmax(0, 1fr);
-      }
-      main {
-        padding: 20px 16px 32px;
-      }
-      header {
-        padding-inline: 16px;
-      }
+      .container { grid-template-columns: minmax(0, 1fr); }
+      main { padding: 20px 16px 32px; }
+      header { padding-inline: 16px; }
     }
 
     .hero {
@@ -219,22 +213,28 @@
       margin: 0;
     }
 
-    /* Datos de usuario (correo) */
+    /* Datos de usuario (correo y password) */
     .user-info {
       margin-top: 10px;
       margin-bottom: 6px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      display: grid;
+      gap: 10px;
       font-size: 0.85rem;
     }
 
-    .user-info label {
-      color: var(--color-text-muted);
+    .user-info label { color: var(--color-text-muted); }
+
+    .user-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 520px) {
+      .user-row { grid-template-columns: 1fr; }
     }
 
     .user-info input {
-      padding: 8px 12px;
+      padding: 10px 12px;
       border-radius: 999px;
       border: 1px solid #d1d5db;
       font-size: 0.85rem;
@@ -244,6 +244,48 @@
     .user-info input:focus {
       border-color: var(--color-primary);
       box-shadow: 0 0 0 1px var(--color-primary-soft);
+    }
+
+    .user-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 10px 14px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.08s, box-shadow 0.08s, background 0.12s, opacity 0.12s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: #f9fafb;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+    }
+    .btn-primary:hover { background: #1d4ed8; box-shadow: 0 10px 26px rgba(37, 99, 235, 0.32); }
+    .btn-primary:active { transform: translateY(1px); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.2); }
+
+    .btn-ghost {
+      background: #f3f4f6;
+      color: #111827;
+      border: 1px solid #e5e7eb;
+    }
+    .btn-ghost:hover { background: #e5e7eb; }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .hint {
+      color: var(--color-text-muted);
+      font-size: 0.78rem;
+      line-height: 1.4;
     }
 
     .tier-toggle {
@@ -380,9 +422,7 @@
       gap: 6px;
     }
 
-    .legal-warning-title span.icon {
-      font-size: 1rem;
-    }
+    .legal-warning-title span.icon { font-size: 1rem; }
 
     /* ===== PAGO POR QR ===== */
     .qr-pay {
@@ -534,9 +574,7 @@
       transition: transform 0.08s, box-shadow 0.08s, background 0.12s;
     }
 
-    .cta-download span.icon {
-      font-size: 1rem;
-    }
+    .cta-download span.icon { font-size: 1rem; }
 
     .cta-download:hover {
       background: #1d4ed8;
@@ -605,7 +643,7 @@
 
         <p class="hero-footnote">
           Tras completar la suscripción, tu cuenta será validada automáticamente
-          contra PayPal y se habilitarán las funciones Pro en la aplicación.
+          y se habilitarán las funciones Pro en la aplicación.
         </p>
       </section>
 
@@ -621,17 +659,26 @@
           <div class="pricing-badge">Suscripciones</div>
         </header>
 
-        <!-- Correo -->
+        <!-- Registro (email + password) -->
         <div class="user-info">
-          <label for="emailInput">
-            Correo electrónico (se utilizará como usuario en la app):
-          </label>
-          <input
-            type="email"
-            id="emailInput"
-            placeholder="tu-correo@ejemplo.com"
-            required
-          />
+          <label for="emailInput">Correo electrónico (será tu usuario en la app):</label>
+          <div class="user-row">
+            <input type="email" id="emailInput" placeholder="tu-correo@ejemplo.com" required />
+            <input type="password" id="passwordInput" placeholder="Crea una contraseña (mín. 6)" minlength="6" />
+          </div>
+
+          <div class="user-actions">
+            <button id="btnRegister" type="button" class="btn btn-primary" onclick="registerAccount()">
+              🧾 Crear cuenta
+            </button>
+            <button id="btnAlready" type="button" class="btn btn-ghost" onclick="markAsAlreadyRegistered()">
+              Ya tengo cuenta
+            </button>
+          </div>
+
+          <div class="hint" id="accountHint">
+            Primero crea tu cuenta (correo + contraseña). Luego paga (PayPal) o envía tu comprobante (QR).
+          </div>
         </div>
 
         <div class="tier-toggle" role="tablist" aria-label="Selector de periodo">
@@ -682,7 +729,7 @@
           </div>
         </div>
 
-        <!-- ===== PAGO POR QR (SE ADAPTA AL PLAN SELECCIONADO) ===== -->
+        <!-- ===== PAGO POR QR ===== -->
         <div class="qr-pay">
           <div class="qr-label">
             Pago alternativo por QR
@@ -694,7 +741,7 @@
               <img src="/qr.png" alt="QR de pago Banco Pichincha" class="qr-img" />
               <div class="qr-note">
                 Escanea el QR desde tu app bancaria y realiza el pago.<br/>
-                Luego envía el comprobante por WhatsApp para activar tu usuario.
+                Luego envía el comprobante por WhatsApp para activación manual.
               </div>
             </div>
 
@@ -722,7 +769,7 @@
                 </button>
 
                 <div style="font-size:12px; color:#6b7280; line-height:1.4;">
-                  Tras verificar el pago, el administrador te asignará <strong>usuario y contraseña</strong> para acceder a la app.
+                  Importante: usa el mismo correo con el que creaste tu cuenta aquí. Luego inicia sesión en la app con tu contraseña.
                 </div>
               </div>
             </div>
@@ -762,13 +809,12 @@
         <div class="usage-flow">
           <div class="usage-title">¿Cómo funciona el flujo de uso?</div>
           <ol class="usage-list">
-            <li>Elige el plan mensual o anual y realiza el pago con PayPal o mediante transferencia usando el QR.</li>
-            <li>Si pagas con PayPal, la suscripción se valida automáticamente. Si pagas por QR, envía el comprobante por WhatsApp para activación manual.</li>
-            <li>Una vez confirmada tu suscripción/activación, descarga e instala la aplicación VacEcPro.</li>
-            <li>Inicia sesión utilizando el correo electrónico ingresado como usuario y las credenciales asignadas.</li>
+            <li>Crea tu cuenta aquí (correo + contraseña).</li>
+            <li>Elige plan y paga con PayPal, o paga por QR y envía el comprobante por WhatsApp.</li>
+            <li>Descarga e instala la aplicación VacEcPro.</li>
+            <li>Inicia sesión en la app con el mismo correo y la contraseña que creaste.</li>
           </ol>
 
-          <!-- Botón de descarga de APK -->
           <a class="cta-download"
              href="https://github.com/darlynp2696-max/VacEcPro-android-release/releases/download/v1.0.0/app-release.apk"
              target="_blank"
@@ -794,11 +840,18 @@
 </script>
 
 <script>
-  // URL de tu backend en producción
-  const BACKEND_URL = "https://vacecpro.onrender.com/api/paypal/validate-subscription";
+  // =========================
+  // BACKEND
+  // =========================
+  const API_BASE = "https://vacecpro.onrender.com";
+  const BACKEND_VALIDATE_URL = API_BASE + "/api/paypal/validate-subscription";
+  const BACKEND_REGISTER_URL = API_BASE + "/api/auth/register";
+
+  // Estado simple de “cuenta creada”
+  let accountReady = false;
 
   function showFeedback(type, message) {
-    var container = document.getElementById('feedback');
+    const container = document.getElementById('feedback');
     if (!container) return;
 
     if (!message) {
@@ -806,9 +859,9 @@
       return;
     }
 
-    var isSuccess = type === 'success';
-    var className = isSuccess ? 'alert alert-success' : 'alert alert-error';
-    var icon = isSuccess ? '✅' : '⚠️';
+    const isSuccess = type === 'success';
+    const className = isSuccess ? 'alert alert-success' : 'alert alert-error';
+    const icon = isSuccess ? '✅' : '⚠️';
 
     container.innerHTML =
       '<div class="' + className + '">' +
@@ -817,8 +870,101 @@
       '</div>';
   }
 
+  function getEmailAndPassword() {
+    const email = (document.getElementById('emailInput')?.value || '').trim().toLowerCase();
+    const password = (document.getElementById('passwordInput')?.value || '');
+    return { email, password };
+  }
+
+  function setBusy(isBusy) {
+    const btn = document.getElementById('btnRegister');
+    const btnAlready = document.getElementById('btnAlready');
+    if (btn) btn.disabled = isBusy;
+    if (btnAlready) btnAlready.disabled = isBusy;
+  }
+
+  function markAsAlreadyRegistered() {
+    const { email } = getEmailAndPassword();
+    if (!email) {
+      alert("Ingresa tu correo primero.");
+      return;
+    }
+    accountReady = true;
+    const hint = document.getElementById("accountHint");
+    if (hint) hint.textContent = "Cuenta marcada como existente. Ya puedes pagar (PayPal) o enviar comprobante (QR).";
+    showFeedback('success', 'Listo. Ahora puedes continuar con el pago usando el correo: <strong>' + email + '</strong>.');
+  }
+
+  async function registerAccount() {
+    const { email, password } = getEmailAndPassword();
+
+    if (!email) {
+      alert("Por favor ingresa tu correo.");
+      return;
+    }
+    if (!password || password.length < 6) {
+      alert("Crea una contraseña de mínimo 6 caracteres.");
+      return;
+    }
+
+    setBusy(true);
+    showFeedback('success', 'Creando tu cuenta…');
+
+    try {
+      const res = await fetch(BACKEND_REGISTER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const json = await res.json().catch(() => ({}));
+
+      if (!res.ok || !json.ok) {
+        showFeedback('error', 'No se pudo crear la cuenta. ' + (json.error ? ('Detalle: <strong>' + json.error + '</strong>') : ''));
+        setBusy(false);
+        return;
+      }
+
+      accountReady = true;
+
+      const hint = document.getElementById("accountHint");
+      if (hint) hint.textContent = "Cuenta lista. Ahora paga (PayPal) o envía comprobante (QR) usando el mismo correo.";
+
+      showFeedback(
+        'success',
+        '✅ Cuenta creada para <strong>' + email + '</strong>.<br>' +
+        (json.alreadyExisted ? 'Nota: el correo ya existía, se mantuvo tu cuenta.' : '') +
+        '<br>Ahora puedes continuar con el pago.'
+      );
+    } catch (e) {
+      console.error(e);
+      showFeedback('error', 'Error de conexión al crear la cuenta. Intenta nuevamente.');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  // Si quieres forzar que el usuario registre antes de pagar, deja esto en true
+  const REQUIRE_ACCOUNT_BEFORE_PAY = false;
+
+  function ensureAccountBeforePayOrThrow() {
+    const { email } = getEmailAndPassword();
+    if (!email) {
+      alert("Ingresa tu correo electrónico.");
+      throw new Error("Missing email");
+    }
+    if (REQUIRE_ACCOUNT_BEFORE_PAY && !accountReady) {
+      alert("Primero crea tu cuenta (botón 'Crear cuenta') o marca 'Ya tengo cuenta'.");
+      throw new Error("Account not ready");
+    }
+    return email;
+  }
+
+  // =========================
+  // PAYPAL
+  // =========================
   function createSubscriptionButton(containerId, planId, label) {
-    var container = document.getElementById(containerId);
+    const container = document.getElementById(containerId);
     if (!container || !window.paypal) return;
 
     paypal.Buttons({
@@ -830,53 +976,36 @@
         height: 48
       },
 
-      // Crear suscripción en PayPal
       createSubscription: function (data, actions) {
         showFeedback(null, '');
+        const email = ensureAccountBeforePayOrThrow(); // valida email (+ opcional registro)
 
-        var emailInput = document.getElementById('emailInput');
-        var email = emailInput ? emailInput.value.trim() : '';
-
-        if (!email) {
-          alert("Por favor ingresa tu correo electrónico antes de suscribirte.");
-          return;
-        }
-
-        return actions.subscription.create({
-          plan_id: planId
-        });
+        return actions.subscription.create({ plan_id: planId });
       },
 
-      // PayPal aprobó el pago
       onApprove: function (data, actions) {
-        var emailInput = document.getElementById('emailInput');
-        var email = emailInput ? emailInput.value.trim() : '';
-
+        const email = (document.getElementById('emailInput')?.value || '').trim().toLowerCase();
         if (!email) {
           showFeedback('error', 'No se encontró el correo electrónico. Vuelve a intentarlo.');
           return;
         }
-
-        var userId = email;
 
         showFeedback('success',
           'Suscripción ' + label +
           ' creada en PayPal. Validando tu suscripción, por favor espera...'
         );
 
-        fetch(BACKEND_URL, {
+        fetch(BACKEND_VALIDATE_URL, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             subscriptionId: data.subscriptionID,
-            userId: userId,
+            userId: email,
             email: email
           })
         })
-          .then(function (res) { return res.json(); })
-          .then(function (json) {
+          .then(res => res.json())
+          .then(json => {
             if (!json.ok) {
               console.error("Respuesta del backend:", json);
               showFeedback(
@@ -888,14 +1017,14 @@
               return;
             }
 
-            var status = json.subscriptionStatus || json.status || "desconocido";
+            const status = json.subscriptionStatus || json.status || "desconocido";
 
             if (json.activeForApp) {
               showFeedback(
                 'success',
                 '✅ Suscripción ' + label + ' activa.<br>' +
                 'ID de suscripción: <strong>' + data.subscriptionID + '</strong>.<br>' +
-                'Ahora puedes descargar la app e iniciar sesión con <strong>' + email + '</strong>.'
+                'Ahora puedes descargar la app e iniciar sesión con <strong>' + email + '</strong> y tu contraseña.'
               );
             } else {
               showFeedback(
@@ -906,22 +1035,15 @@
               );
             }
           })
-          .catch(function (err) {
+          .catch(err => {
             console.error("Error llamando al backend:", err);
-            showFeedback(
-              'error',
-              'Ocurrió un error de conexión al validar tu suscripción. Intenta nuevamente más tarde.'
-            );
+            showFeedback('error', 'Ocurrió un error de conexión al validar tu suscripción. Intenta nuevamente más tarde.');
           });
       },
 
       onError: function (err) {
         console.error('PayPal error:', err);
-        showFeedback(
-          'error',
-          'Ocurrió un problema al procesar el pago. ' +
-          'Revisa la consola del navegador para más detalles o inténtalo de nuevo.'
-        );
+        showFeedback('error', 'Ocurrió un problema al procesar el pago. Inténtalo de nuevo.');
       }
 
     }).render('#' + containerId);
@@ -929,10 +1051,10 @@
 
   // Toggle mensual / anual
   (function setupToggle() {
-    var btnMonthly = document.getElementById('btn-monthly');
-    var btnYearly  = document.getElementById('btn-yearly');
-    var panelMonthly = document.getElementById('price-monthly');
-    var panelYearly  = document.getElementById('price-yearly');
+    const btnMonthly = document.getElementById('btn-monthly');
+    const btnYearly  = document.getElementById('btn-yearly');
+    const panelMonthly = document.getElementById('price-monthly');
+    const panelYearly  = document.getElementById('price-yearly');
 
     if (!btnMonthly || !btnYearly) return;
 
@@ -961,68 +1083,51 @@
 
   // Crear botones PayPal con tus IDs de plan
   if (window.paypal) {
-    createSubscriptionButton(
-      'paypal-monthly',
-      'P-7WS92829J39649832NE3ABTY',  // plan mensual
-      'mensual'
-    );
-    createSubscriptionButton(
-      'paypal-yearly',
-      'P-4B997107KS231694UNE3ADTY',  // plan anual
-      'anual'
-    );
+    createSubscriptionButton('paypal-monthly', 'P-7WS92829J39649832NE3ABTY', 'mensual');
+    createSubscriptionButton('paypal-yearly', 'P-4B997107KS231694UNE3ADTY', 'anual');
   } else {
     console.error('PayPal SDK no se ha cargado correctamente.');
   }
 
-  // ===== QR: datos y envío por WhatsApp =====
+  // =========================
+  // QR: datos y envío WhatsApp
+  // =========================
   const QR_WHATSAPP_NUMBER = "5930991497007";
 
   function getSelectedPlanForQr() {
-    var yearlyPanel = document.getElementById('price-yearly');
-    var isYearly = yearlyPanel && yearlyPanel.style.display !== 'none';
-
-    if (isYearly) {
-      return { key: 'ANUAL', label: 'Anual', amount: '$29.99 USD' };
-    }
+    const yearlyPanel = document.getElementById('price-yearly');
+    const isYearly = yearlyPanel && yearlyPanel.style.display !== 'none';
+    if (isYearly) return { key: 'ANUAL', label: 'Anual', amount: '$29.99 USD' };
     return { key: 'MENSUAL', label: 'Mensual', amount: '$3.99 USD' };
   }
 
   function refreshQrPlanUI() {
-    var plan = getSelectedPlanForQr();
+    const plan = getSelectedPlanForQr();
 
-    var amountText = document.getElementById('qrAmountText');
+    const amountText = document.getElementById('qrAmountText');
     if (amountText) amountText.textContent = plan.amount + " (" + plan.label + ")";
 
-    var refHint = document.getElementById('qrRefHint');
+    const refHint = document.getElementById('qrRefHint');
     if (refHint) refHint.textContent = "VACECPRO-XXXX-" + plan.key;
   }
 
-  // Inicializa UI del QR al cargar
   refreshQrPlanUI();
 
   function sendQrReceiptWhatsapp() {
-    var emailInput = document.getElementById('emailInput');
-    var email = emailInput ? emailInput.value.trim() : '';
+    const email = ensureAccountBeforePayOrThrow(); // valida email (+ opcional registro)
+    const plan = getSelectedPlanForQr();
 
-    if (!email) {
-      alert("Por favor ingresa tu correo electrónico (se usará como usuario en la app).");
-      return;
-    }
-
-    var plan = getSelectedPlanForQr();
-
-    var name = (document.getElementById('qr_name')?.value || '').trim();
-    var phone = (document.getElementById('qr_phone')?.value || '').trim();
-    var ref = (document.getElementById('qr_ref')?.value || '').trim();
+    const name = (document.getElementById('qr_name')?.value || '').trim();
+    const phone = (document.getElementById('qr_phone')?.value || '').trim();
+    let ref = (document.getElementById('qr_ref')?.value || '').trim();
 
     if (!ref) {
-      var digits = (phone.match(/\d+/g) || []).join('');
-      var last4 = digits.length >= 4 ? digits.slice(-4) : "XXXX";
+      const digits = (phone.match(/\d+/g) || []).join('');
+      const last4 = digits.length >= 4 ? digits.slice(-4) : "XXXX";
       ref = "VACECPRO-" + last4 + "-" + plan.key;
     }
 
-    var lines = [
+    const lines = [
       "Hola, realicé un pago por QR para VACECPRO.",
       "",
       "BANCO: Pichincha",
@@ -1039,8 +1144,8 @@
       "Adjunto el comprobante para activación. Gracias."
     ];
 
-    var text = encodeURIComponent(lines.join("\n"));
-    var url = "https://wa.me/" + QR_WHATSAPP_NUMBER + "?text=" + text;
+    const text = encodeURIComponent(lines.join("\n"));
+    const url = "https://wa.me/" + QR_WHATSAPP_NUMBER + "?text=" + text;
 
     window.open(url, "_blank", "noopener,noreferrer");
   }
