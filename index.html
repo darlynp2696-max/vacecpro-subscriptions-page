@@ -586,6 +586,71 @@
       box-shadow: 0 6px 16px rgba(37, 99, 235, 0.2);
     }
 
+    /* =========================
+       NUEVO: CARD PRODUCTO EXTRA
+       ========================= */
+    .product-card {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .product-title {
+      margin: 2px 0 6px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--color-text-main);
+      line-height: 1.25;
+    }
+
+    .product-subtitle {
+      margin: 0 0 12px;
+      font-size: 0.86rem;
+      color: var(--color-text-muted);
+      line-height: 1.55;
+    }
+
+    .product-box {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 0.85rem;
+      color: var(--color-text-main);
+    }
+
+    .mini-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .mini-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      color: #3730a3;
+      font-weight: 700;
+    }
+
+    .btn-alt {
+      border-radius: 999px;
+      border: none;
+      padding: 11px 14px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      background: #0f766e;
+      color: #f9fafb;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(15, 118, 110, 0.22);
+      transition: transform 0.08s, box-shadow 0.08s, background 0.12s;
+    }
+    .btn-alt:hover { background: #0d9488; box-shadow: 0 10px 26px rgba(15, 118, 110, 0.28); }
+    .btn-alt:active { transform: translateY(1px); box-shadow: 0 6px 16px rgba(15, 118, 110, 0.18); }
+
     footer {
       padding: 12px 24px 20px;
       text-align: center;
@@ -815,14 +880,83 @@
             <li>Inicia sesión en la app con el mismo correo y la contraseña que creaste.</li>
           </ol>
 
-         <a class="cta-download"
-   href="https://github.com/darlynp2696-max/VacEcPro-android-release/releases/latest/download/app-release.apk"
-   target="_blank"
-   rel="noopener noreferrer">
+          <a class="cta-download"
+             href="https://github.com/darlynp2696-max/VacEcPro-android-release/releases/latest/download/app-release.apk"
+             target="_blank"
+             rel="noopener noreferrer">
             <span class="icon">⬇️</span>
             Descargar app VacEcPro (APK)
           </a>
         </div>
+
+        <!-- =======================================================
+             NUEVO: PROMOCIÓN PEDIADOSISEC (SOLO QR · ANUAL 9,99)
+             ======================================================= -->
+        <div class="product-card" aria-label="PediaDosisEC - Pago por QR">
+          <div class="qr-label">
+            Otro producto
+            <span class="qr-badge">SOLO QR</span>
+          </div>
+
+          <div class="product-title">PediaDosisEC · Calculadora de Dosis Pediátrica</div>
+          <p class="product-subtitle">
+            Una herramienta clínica rápida para <strong>calcular dosis por peso</strong> con un flujo práctico:
+            eliges el fármaco, ingresas el peso y obtienes una indicación clara (ej. “X ml cada 8 horas”),
+            lista para prescripción. Ideal para consulta externa, emergencia y escenarios rurales.
+            <br><br>
+            <strong>Incluye soporte + actualizaciones:</strong> correcciones, mejoras de usabilidad, ajustes y ampliaciones
+            progresivas para que la app se mantenga alineada a la práctica clínica real.
+          </p>
+
+          <div class="qr-grid">
+            <div>
+              <img src="/qr.png" alt="QR de pago Banco Pichincha" class="qr-img" />
+              <div class="qr-note">
+                Escanea el QR desde tu app bancaria y realiza el pago.<br/>
+                Luego envía el comprobante por WhatsApp para activación anual.
+              </div>
+            </div>
+
+            <div>
+              <div class="product-box">
+                <div><strong>Banco:</strong> Pichincha</div>
+                <div><strong>Titular:</strong> Darlyn Alexis Peña Melendres</div>
+                <div style="margin-top:6px;">
+                  <strong>Plan:</strong> ANUAL
+                </div>
+                <div style="margin-top:6px;">
+                  <strong>Precio:</strong> <span id="pdAmountText">$9.99 USD / año</span>
+                </div>
+                <div style="margin-top:6px;">
+                  <strong>Referencia sugerida:</strong>
+                  <span id="pdRefHint">PEDIADOSIS-XXXX-ANUAL</span>
+                </div>
+
+                <div class="mini-badges">
+                  <span class="mini-badge">Dosis por peso</span>
+                  <span class="mini-badge">Rápido</span>
+                  <span class="mini-badge">Soporte + updates</span>
+                </div>
+
+                <div class="qr-form" style="margin-top:12px;">
+                  <input id="pd_email" type="email" placeholder="Correo (usuario para activar)" />
+                  <input id="pd_name" type="text" placeholder="Nombre y apellido" />
+                  <input id="pd_phone" type="tel" placeholder="Teléfono (ej: 09xxxxxxxx)" />
+                  <input id="pd_ref" type="text" placeholder="Referencia (opcional, ej: PEDIADOSIS-1234-ANUAL)" />
+
+                  <button class="btn-alt" type="button" onclick="sendPediaDosisReceiptWhatsapp()">
+                    Pagar por QR y enviar comprobante por WhatsApp
+                  </button>
+
+                  <div style="font-size:12px; color:#6b7280; line-height:1.4;">
+                    Tras verificar el pago, se activa tu acceso anual para PediaDosisEC con el correo indicado.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </section>
     </div>
   </main>
@@ -978,8 +1112,7 @@
 
       createSubscription: function (data, actions) {
         showFeedback(null, '');
-        const email = ensureAccountBeforePayOrThrow(); // valida email (+ opcional registro)
-
+        ensureAccountBeforePayOrThrow(); // valida email (+ opcional registro)
         return actions.subscription.create({ plan_id: planId });
       },
 
@@ -1142,6 +1275,63 @@
       "Referencia: " + ref,
       "",
       "Adjunto el comprobante para activación. Gracias."
+    ];
+
+    const text = encodeURIComponent(lines.join("\n"));
+    const url = "https://wa.me/" + QR_WHATSAPP_NUMBER + "?text=" + text;
+
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  // =========================
+  // PEDIADOSISEC (SOLO QR · 9,99 ANUAL) - NUEVO
+  // =========================
+  const PEDIADOSIS_PRICE = "$9.99 USD / año";
+  const PEDIADOSIS_REF_PREFIX = "PEDIADOSIS";
+
+  function refreshPediaDosisUI() {
+    const pdAmountText = document.getElementById('pdAmountText');
+    if (pdAmountText) pdAmountText.textContent = PEDIADOSIS_PRICE;
+
+    const pdRefHint = document.getElementById('pdRefHint');
+    if (pdRefHint) pdRefHint.textContent = PEDIADOSIS_REF_PREFIX + "-XXXX-ANUAL";
+  }
+  refreshPediaDosisUI();
+
+  function sendPediaDosisReceiptWhatsapp() {
+    // Email del producto (puede ser distinto al de VacEcPro si quieres)
+    const email = (document.getElementById('pd_email')?.value || '').trim().toLowerCase();
+    if (!email) {
+      alert("Ingresa el correo para activar PediaDosisEC.");
+      return;
+    }
+
+    const name = (document.getElementById('pd_name')?.value || '').trim();
+    const phone = (document.getElementById('pd_phone')?.value || '').trim();
+    let ref = (document.getElementById('pd_ref')?.value || '').trim();
+
+    if (!ref) {
+      const digits = (phone.match(/\d+/g) || []).join('');
+      const last4 = digits.length >= 4 ? digits.slice(-4) : "XXXX";
+      ref = PEDIADOSIS_REF_PREFIX + "-" + last4 + "-ANUAL";
+    }
+
+    const lines = [
+      "Hola, realicé un pago por QR para PEDIADOSISEC (Calculadora de Dosis Pediátrica).",
+      "",
+      "BANCO: Pichincha",
+      "Titular: Darlyn Alexis Peña Melendres",
+      "Producto: PediaDosisEC",
+      "Plan: ANUAL",
+      "Monto: " + PEDIADOSIS_PRICE,
+      "",
+      "Datos del usuario:",
+      "Correo (usuario): " + email,
+      "Nombre: " + (name || "—"),
+      "Teléfono: " + (phone || "—"),
+      "Referencia: " + ref,
+      "",
+      "Adjunto el comprobante para activación anual. Gracias."
     ];
 
     const text = encodeURIComponent(lines.join("\n"));
